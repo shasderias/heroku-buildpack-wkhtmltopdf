@@ -19,7 +19,7 @@ WKHTMLTOPDF_TAR_PATH="$CACHE_DIR/wkhtmltox.tar.xz"
 WKHTMLTOPDF_TAR_BIN_PATH="$CACHE_DIR/wkhtmltox/bin/wkhtmltopdf"
 WKHTMLTOPDF_BIN_PATH="$BIN_PATH/wkhtmltopdf"
 
-echo "------> Downloading wkhtmltopdf"
+echo "-----> Downloading wkhtmltopdf"
 
 curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_TAR_PATH
 
@@ -40,5 +40,5 @@ echo "writing profile script" | indent
 mkdir -p $BUILD_DIR/.profile.d
 
 cat <<EOF >$BUILD_DIR/.profile.d/wkhtmltopdf.sh
-export PATH="$BIN_PATH:\$PATH"
+export PATH="\$HOME/bin:\$PATH"
 EOF

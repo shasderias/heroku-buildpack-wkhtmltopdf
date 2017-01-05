@@ -15,13 +15,15 @@ CACHE_DIR=$2
 BIN_PATH="$BUILD_DIR/bin"
 
 WKHTMLTOPDF_URL="http://download.gna.org/wkhtmltopdf/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz"
-WKHTMLTOPDF_TAR_PATH="$CACHE_DIR/wkhtmltox.tar.xz"
+WKHTMLTOPDF_TAR_PATH="$CACHE_DIR/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz"
 WKHTMLTOPDF_TAR_BIN_PATH="$CACHE_DIR/wkhtmltox/bin/wkhtmltopdf"
 WKHTMLTOPDF_BIN_PATH="$BIN_PATH/wkhtmltopdf"
 
 echo "-----> Downloading wkhtmltopdf"
 
-curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_TAR_PATH
+if [ ! -f $WKHTMLTOPDF_TAR_PATH ]; then
+  curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_TAR_PATH
+fi
 
 echo "untaring archive" | indent
 

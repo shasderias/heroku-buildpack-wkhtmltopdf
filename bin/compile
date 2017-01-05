@@ -1,16 +1,44 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+set -e
 
 indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Found a hello.txt"
+echo "-----> wkhtmltopdf"
 
-# if hello.txt is empty, abort the build
-if [ ! -s $1/hello.txt ]; then
-  echo "hello.txt was empty" | indent
-  exit 1
-fi
+BUILD_DIR=$1
+CACHE_DIR=$2
 
-# replace hello with goodbye in a new file
-cat $1/hello.txt | sed -e "s/[Hh]ello/Goodbye/g" > $1/goodbye.txt
+BIN_PATH="$BUILD_DIR/bin"
+
+WKHTMLTOPDF_URL="http://download.gna.org/wkhtmltopdf/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz"
+WKHTMLTOPDF_TAR_PATH="$CACHE_DIR/wkhtmltox.tar.xz"
+WKHTMLTOPDF_TAR_BIN_PATH="$CACHE_DIR/wkhtmltox/bin/wkhtmltopdf"
+WKHTMLTOPDF_BIN_PATH="$BIN_PATH/wkhtmltopdf"
+
+echo "------> Downloading wkhtmltopdf"
+
+curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_TAR_PATH
+
+echo "untaring archive" | indent
+
+tar -xf $WKHTMLTOPDF_TAR_PATH -C $CACHE_DIR
+
+echo "installing wkhtmltopdf" | indent
+
+mkdir -p $BIN_PATH
+
+cp $WKHTMLTOPDF_TAR_BIN_PATH $WKHTMLTOPDF_BIN_PATH
+
+chmod +x $WKHTMLTOPDF_BIN_PATH
+
+echo "writing profile script" | indent
+
+mkdir -p $BUILD_DIR/.profile.d
+
+cat <<EOF >$BUILD_DIR/.profile.d/wkhtmltopdf.sh
+export PATH="$BIN_PATH:\$PATH"
+EOF
